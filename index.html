@@ -13,7 +13,8 @@
   <meta name="generator" content="Hugo 0.122.0">
   <link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.css">
   <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/heroes/">
-
+<!-- Additional meta tags for mobile optimization -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <!-- Bootstrap & jQuery CDN -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
@@ -937,6 +938,129 @@ document.getElementById("signup-form").addEventListener("submit", async (event) 
     <!-- End Footer Middle -->
 </footer>
 
+
+<!-- Script to optimize marquee performance on mobile -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if device is mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // Reduce number of visible logos on mobile to improve performance
+      const marqueeContents = document.querySelectorAll('.marquee__content');
+      
+      marqueeContents.forEach(content => {
+        const companiesRows = content.querySelectorAll('.companies-row');
+        
+        companiesRows.forEach(row => {
+          // Keep only first 8 logos visible on mobile for better performance
+          const allLogos = row.querySelectorAll('.companies-grid-div');
+          
+          if (allLogos.length > 8) {
+            for (let i = 8; i < allLogos.length; i++) {
+              // Hide excess logos on initial mobile load
+              allLogos[i].style.display = 'none';
+            }
+            
+            // After page is fully loaded, show them with reduced animation
+            setTimeout(() => {
+              for (let i = 8; i < allLogos.length; i++) {
+                allLogos[i].style.display = 'flex';
+              }
+            }, 1000);
+          }
+        });
+      });
+    }
+    
+    // Implement touch sensitivity for mobile
+    const marquee = document.querySelector('.marquee');
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    marquee.addEventListener('touchstart', function(event) {
+      touchStartX = event.changedTouches[0].screenX;
+      
+      // Pause animation on touch
+      document.querySelectorAll('.marquee__content').forEach(content => {
+        content.style.animationPlayState = 'paused';
+      });
+    }, false);
+    
+    marquee.addEventListener('touchend', function(event) {
+      touchEndX = event.changedTouches[0].screenX;
+      handleSwipe();
+      
+      // Resume animation after touch
+      document.querySelectorAll('.marquee__content').forEach(content => {
+        content.style.animationPlayState = 'running';
+      });
+    }, false);
+    
+    function handleSwipe() {
+      const swipeDistance = touchEndX - touchStartX;
+      
+      if (Math.abs(swipeDistance) > 50) {
+        // Manual scroll of the marquee based on swipe direction
+        const marqueeContents = document.querySelectorAll('.marquee__content');
+        
+        marqueeContents.forEach(content => {
+          const currentTransform = getComputedStyle(content).transform;
+          const matrix = new DOMMatrixReadOnly(currentTransform);
+          let currentX = matrix.m41;
+          
+          // Apply manual transform based on swipe
+          content.style.transform = `translateX(${currentX + swipeDistance}px)`;
+          
+          // Reset to animation after brief delay
+          setTimeout(() => {
+            content.style.transition = 'none';
+            content.style.transform = '';
+            setTimeout(() => {
+              content.style.transition = '';
+            }, 50);
+          }, 300);
+        });
+      }
+    }
+  });
+</script>
+
+<!-- Lazy loading for images to improve mobile performance -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add lazy loading attribute to all images
+    const images = document.querySelectorAll('.companies-grid-div img');
+    
+    images.forEach(img => {
+      img.setAttribute('loading', 'lazy');
+      
+      // Placeholder for images while loading
+      img.style.opacity = '0';
+      img.style.transition = 'opacity 0.3s ease';
+      
+      img.onload = function() {
+        img.style.opacity = '1';
+      };
+      
+      // Fallback if image fails to load
+      img.onerror = function() {
+        // Replace with a placeholder or company name
+        const companyName = img.getAttribute('alt');
+        const parent = img.parentNode;
+        
+        const placeholderDiv = document.createElement('div');
+        placeholderDiv.className = 'company-placeholder';
+        placeholderDiv.textContent = companyName || 'Company';
+        placeholderDiv.style.color = '#666';
+        placeholderDiv.style.fontSize = '14px';
+        placeholderDiv.style.textAlign = 'center';
+        
+        parent.replaceChild(placeholderDiv, img);
+      };
+    });
+  });
+</script>
 
   <!-- Chatbot Icon (Button to open the chatbot) -->
   <div id="chatbot-icon" class="chat-icon" onclick="toggleChatWindow()">
