@@ -1,5 +1,9 @@
 exclude:
-  - node_modules
-  - vendor
-  - Gemfile
-  - Gemfile.lock
+  - "node_modules"
+  - "backend"
+  - "README.md"
+  - "package.json"
+  - "package-lock.json"
+  - "yarn.lock"
+  - "vite.config.js"
+  - "*.log"
