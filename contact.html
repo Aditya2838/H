@@ -485,27 +485,53 @@ document.getElementById("signup-form").addEventListener("submit", async (event) 
                                 </div>
                                 <!-- End Single Widget -->
                             </div>
-                            <div class="col-lg-4 col-md-6 col-12">
-                                <!-- Single Widget -->
-                                <div class="single-footer newsletter">
-                                    <h3>Contact us</h3>
-                                    <p>Get in touch to get the latest jobs posted, candidates...</p>
-                                    <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
-                                        <input name="EMAIL" placeholder="Your email address" class="common-input"
-                                            onfocus="this.placeholder = ''"
-                                            onblur="this.placeholder = 'Your email address'" required="" type="email">
-                                        <div class="button">
-                                            <button class="btn">Contact Now! <span class="dir-part"></span></button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- End Single Widget -->
+                           <div class="col-lg-4 col-md-6 col-12">
+                            <!-- Single Widget -->
+                            <div class="single-footer newsletter">
+                                <h3>Contact us</h3>
+                                <p>Get in touch to get the latest jobs posted, candidates...</p>
+                                <form id="query-form">
+                                    <input id="query-email" name="EMAIL" placeholder="Your email address" class="common-input"
+                                        onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Your email address'" required type="email">
+                                    <div class="button">
+                                        <button type="submit" class="btn">Contact Now! <span class="dir-part"></span></button>
+                                    </div>
+                                </form>
                             </div>
+                            <!-- End Single Widget -->
                         </div>
+                        
+<script>
+    document.getElementById("query-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        
+        const email = document.getElementById("query-email").value;
+    
+        try {
+            const response = await fetch("http://localhost:5000/user-queries", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+    
+            const data = await response.json();
+            alert(data.message || data.error);
+            
+            if (response.ok) {
+                document.getElementById("query-form").reset();
+            }
+        } catch (error) {
+            alert("Error submitting the query. Please try again.");
+            console.error(error);
+        }
+    });
+    </script>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
         <!--/ End Footer Middle -->
         <!-- Start Footer Bottom -->
         <div class="footer-bottom">
