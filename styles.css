@@ -2991,13 +2991,48 @@ height: 5px;
 .pb-225 {
   padding-bottom: 225px;
 }
-.call-action {
-  background-image: url("images/cat-bg.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
-  z-index: 2;
+@media only screen and (max-width: 1767px) {
+  .call-action {
+    background-image: url("images/cat-bg.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: scroll;
+    padding: 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
   
+  /* Add an overlay if needed for better text visibility */
+  .call-action::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+    z-index: -1;
+  }
+  
+  /* Ensure content inside has proper spacing and visibility */
+  .call-action .container {
+    position: relative;
+    z-index: 3;
+  }
+  
+  /* Adjust text size and spacing for better mobile appearance */
+  .call-action h2,
+  .call-action h3 {
+    font-size: 24px;
+    line-height: 1.3;
+    margin-bottom: 15px;
+  }
+  
+  .call-action p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
 }
 
 .call-action.style2 {
