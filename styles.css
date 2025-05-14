@@ -2991,7 +2991,7 @@ height: 5px;
 .pb-225 {
   padding-bottom: 225px;
 }
-@media only screen and (max-width: 1767px) {
+@media only screen and (max-width: 17767px) {
   .call-action {
     background-image: url("cat-bg.jpg");
     background-size: cover;
